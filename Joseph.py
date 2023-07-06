@@ -35,9 +35,10 @@ class Joseph:
         return counter
 
 
-total_number = int(input("Please enter the total number:"))
-interval = int(input("Please enter the interval:"))
-solution = Joseph(total_number=total_number, interval=interval)
-print(solution.method3())
-assert solution.method3() == solution.method1()
-assert solution.method3() == solution.method2(total_number, interval)
+if __name__ == "__main__":
+    total_number = int(input("Please enter the total number:"))
+    interval = int(input("Please enter the interval:"))
+    solution = Joseph(total_number=total_number, interval=interval)
+    print(solution.method3())
+    assert solution.method3() == solution.method1()
+    assert solution.method3() == solution.method2(total_number, interval)
