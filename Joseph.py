@@ -1,5 +1,6 @@
 import sys
 import time
+from collections import deque
 sys.setrecursionlimit(1000000)
 
 
@@ -15,6 +16,19 @@ class Methods:
         self.total_number = total_number
         self.step = step
         self.people_list = people_list
+        self.iter_list = [people for people in people_list]
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        """使用迭代器来求解"""
+        if (len(self.iter_list) == 0):
+            raise StopIteration
+        idx = (self.step-1) % len(self.iter_list)
+        removed = self.iter_list.pop(idx)
+        self.iter_list = self.iter_list[idx:]+self.iter_list[:idx]
+        return removed
 
     def use_list(self):
         """使用list来进行求解"""
@@ -26,6 +40,7 @@ class Methods:
         return person_list[0]
 
     def use_linkedlist(self):
+        """使用链表来求解"""
         linkedlist = LinkedList()
         for person in self.people_list:
             linkedlist.append(person)
@@ -38,6 +53,14 @@ class Methods:
                 linkedlist.delete(current.data)
             current = current.next
         return linkedlist.head.data
+
+    def use_deque(self):
+        """使用collections库中的deque求解"""
+        queue = deque(self.people_list)
+        while (len(queue) > 1):
+            queue.rotate(1-step)
+            queue.popleft()
+        return queue[0]
 
     def use_ecursion1(self, total_number=None, step=None):
         """使用递归的方法进行求解"""
@@ -60,19 +83,18 @@ class Methods:
         return self.people_list[counter]
 
 
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.next = None
-
-
 class LinkedList:
+    class LinkedListNode:
+        def __init__(self, data):
+            self.data = data
+            self.next = None
+
     def __init__(self):
         self.head = None
         self.tail = None
 
     def append(self, data):
-        new_node = Node(data)
+        new_node = LinkedList.LinkedListNode(data)
         if (self.head is None):
             self.head = new_node
             self.tail = new_node
@@ -138,10 +160,16 @@ if __name__ == "__main__":
                        step=step, people_list=people_list)
     survival1, time1 = measure_time(solution.use_list)
     survival2, time2 = measure_time(solution.use_linkedlist)
-    survival3, time3 = measure_time(solution.use_ecursion1)
-    survival4, time4 = measure_time(solution.use_ecursion2)
+    survival3, time3 = measure_time(solution.use_deque)
+    survival4, time4 = measure_time(solution.use_ecursion1)
+    survival5, time5 = measure_time(solution.use_ecursion2)
     print("序号:{},姓名:{},年龄:{}".format(
         survival1.number, survival1.name, survival1.age))
-    print("数组方法的用时:{}\n链表方法的用时:{}\n递归方法的用时:{}\n递推方法的用时:{}".format(
-        time1, time2, time3, time4))
-    assert survival1 == survival2 and survival1 == survival3 and survival1 == survival4
+    print("数组方法的用时:{}\n链表方法的用时:{}\n队列方法用时:{}\n递归方法的用时:{}\n递推方法的用时:{}".format(
+        time1, time2, time3, time4, time5))
+    assert (survival1 == survival2 and survival1 == survival3
+            and survival1 == survival4 and survival1 == survival5)
+    file_writer = open('JosephusCircle.txt', 'w')
+    for people in solution:
+        file_writer.write("序号:{},姓名:{},年龄:{}\n".format(
+            people.number, people.name, people.age))
