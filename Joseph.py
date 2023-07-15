@@ -1,12 +1,13 @@
 import sys
 import time
+from copy import deepcopy
 from collections import deque
 sys.setrecursionlimit(1000000)
 
 
 class Person:
-    def __init__(self, number, name, age=20):
-        self.number = number
+    def __init__(self, id, name, age):
+        self.id = id
         self.name = name
         self.age = age
 
@@ -16,7 +17,7 @@ class Methods:
         self.total_number = total_number
         self.step = step
         self.people_list = people_list
-        self.iter_list = [people for people in people_list]
+        self.iter_list = deepcopy(people_list)
 
     def __iter__(self):
         return self
@@ -25,14 +26,14 @@ class Methods:
         """使用迭代器来求解"""
         if (len(self.iter_list) == 0):
             raise StopIteration
-        idx = (self.step-1) % len(self.iter_list)
-        removed = self.iter_list.pop(idx)
-        self.iter_list = self.iter_list[idx:]+self.iter_list[:idx]
+        id = (self.step-1) % len(self.iter_list)
+        removed = self.iter_list.pop(id)
+        self.iter_list = self.iter_list[id:]+self.iter_list[:id]
         return removed
 
     def use_list(self):
         """使用list来进行求解"""
-        person_list = [person for person in people_list]
+        person_list = deepcopy(people_list)
         list_counter = 0
         while (len(person_list) > 1):
             list_counter = (list_counter+self.step-1) % len(person_list)
@@ -138,9 +139,14 @@ def data_input():
 
 
 def create_list(total_number):
+    file_reader = open('JosephusCircle.txt', 'r')
     people_list = []
     for i in range(0, total_number):
-        one_person = Person(number=i, name='_-%d' % (i)+'-_')
+        line_content = file_reader.readline()
+        id = line_content.split(',')[0].split(':')[-1].strip()
+        name = line_content.split(',')[1].split(':')[-1].strip()
+        age = line_content.split(',')[2].split(':')[-1].strip()
+        one_person = Person(id, name, age)
         people_list.append(one_person)
     return people_list
 
@@ -153,6 +159,17 @@ def measure_time(func):
     return solution, execution_time
 
 
+def use_iter():
+    """使用迭代器迭代对象"""
+    file_writer = open('JosephusAnswer.txt', 'w')
+    for people in solution:
+        file_writer.write("序号:{},姓名:{},年龄:{}\n".format(
+            people.id, people.name, people.age))
+    else:
+        file_writer.close()
+        return people
+
+
 if __name__ == "__main__":
     total_number, step = data_input()
     people_list = create_list(total_number)
@@ -163,13 +180,12 @@ if __name__ == "__main__":
     survival3, time3 = measure_time(solution.use_deque)
     survival4, time4 = measure_time(solution.use_ecursion1)
     survival5, time5 = measure_time(solution.use_ecursion2)
+    survival6, time6 = measure_time(use_iter)
     print("序号:{},姓名:{},年龄:{}".format(
-        survival1.number, survival1.name, survival1.age))
-    print("数组方法的用时:{}\n链表方法的用时:{}\n队列方法用时:{}\n递归方法的用时:{}\n递推方法的用时:{}".format(
-        time1, time2, time3, time4, time5))
-    assert (survival1 == survival2 and survival1 == survival3
-            and survival1 == survival4 and survival1 == survival5)
-    file_writer = open('JosephusCircle.txt', 'w')
-    for people in solution:
-        file_writer.write("序号:{},姓名:{},年龄:{}\n".format(
-            people.number, people.name, people.age))
+        survival1.id, survival1.name, survival1.age))
+    print("数组方法的用时:{}\n链表方法的用时:{}\n队列方法用时:{}\n"
+          "递归方法的用时:{}\n递推方法的用时:{}\n迭代器方法的用时:{}".format(
+              time1, time2, time3, time4, time5, time6))
+    assert (survival1.id == survival2.id and survival1.id == survival3.id
+            and survival1.id == survival4.id and survival1.id == survival5.id
+            and survival1.id == survival6.id)
