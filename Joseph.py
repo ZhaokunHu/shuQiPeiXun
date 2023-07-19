@@ -2,6 +2,8 @@ import sys
 import time
 from copy import deepcopy
 from collections import deque
+import JosephReader
+import LogMaker
 sys.setrecursionlimit(1000000)
 
 
@@ -12,18 +14,19 @@ class Person:
         self.age = age
 
 
-class Methods:
+class SolvingJosephMethods:
     def __init__(self, total_number, step, people_list):
         self.total_number = total_number
         self.step = step
         self.people_list = people_list
-        self.iter_list = deepcopy(people_list)
 
     def __iter__(self):
+        """使用迭代器来求解"""
+        LogMaker.logger.info('使用迭代器来求解')
+        self.iter_list = deepcopy(people_list)
         return self
 
     def __next__(self):
-        """使用迭代器来求解"""
         if (len(self.iter_list) == 0):
             raise StopIteration
         id = (self.step-1) % len(self.iter_list)
@@ -33,6 +36,7 @@ class Methods:
 
     def use_list(self):
         """使用list来进行求解"""
+        LogMaker.logger.info('使用list来求解')
         person_list = deepcopy(people_list)
         list_counter = 0
         while (len(person_list) > 1):
@@ -42,6 +46,7 @@ class Methods:
 
     def use_linkedlist(self):
         """使用链表来求解"""
+        LogMaker.logger.info('使用链表来求解')
         linkedlist = LinkedList()
         for person in self.people_list:
             linkedlist.append(person)
@@ -49,7 +54,7 @@ class Methods:
         step_counter = 0
         while (linkedlist.head != linkedlist.tail):
             step_counter += 1
-            if (step_counter == step):
+            if (step_counter == self.step):
                 step_counter = 0
                 linkedlist.delete(current.data)
             current = current.next
@@ -57,9 +62,10 @@ class Methods:
 
     def use_deque(self):
         """使用collections库中的deque求解"""
+        LogMaker.logger.info('使用collections库中的deque求解')
         queue = deque(self.people_list)
         while (len(queue) > 1):
-            queue.rotate(1-step)
+            queue.rotate(1-self.step)
             queue.popleft()
         return queue[0]
 
@@ -73,11 +79,13 @@ class Methods:
             return 0
         counter = self.use_ecursion1(total_number-1, step)
         if (total_number == self.total_number):
+            LogMaker.logger.info('使用递归的方法进行求解')
             return people_list[(step+counter) % total_number]
         return (step+counter) % total_number
 
     def use_ecursion2(self):
         """使用递推的方法进行求解"""
+        LogMaker.logger.info('使用递推的方法进行求解')
         counter = 0
         for i in range(2, self.total_number + 1):
             counter = (counter + self.step) % i
@@ -138,19 +146,6 @@ def data_input():
             print("输入的数据应当为正整数")
 
 
-def create_list(total_number):
-    file_reader = open('JosephusCircle.txt', 'r')
-    people_list = []
-    for i in range(0, total_number):
-        line_content = file_reader.readline()
-        id = line_content.split(',')[0].split(':')[-1].strip()
-        name = line_content.split(',')[1].split(':')[-1].strip()
-        age = line_content.split(',')[2].split(':')[-1].strip()
-        one_person = Person(id, name, age)
-        people_list.append(one_person)
-    return people_list
-
-
 def measure_time(func):
     start_time = time.perf_counter()
     solution = func()
@@ -171,10 +166,14 @@ def use_iter():
 
 
 if __name__ == "__main__":
-    total_number, step = data_input()
-    people_list = create_list(total_number)
-    solution = Methods(total_number=total_number,
-                       step=step, people_list=people_list)
+    LogMaker.logger.info('程序开始运行')
+    filename = 'JosephusCircle.zip'
+    people_list = JosephReader.Reader().read_file(filename=filename)
+    if (people_list == []):
+        LogMaker.logger.error('文件名无效')
+        raise ValueError('文件名无效')
+    solution = SolvingJosephMethods(total_number=len(people_list),
+                             step=3, people_list=people_list)
     survival1, time1 = measure_time(solution.use_list)
     survival2, time2 = measure_time(solution.use_linkedlist)
     survival3, time3 = measure_time(solution.use_deque)
@@ -189,3 +188,4 @@ if __name__ == "__main__":
     assert (survival1.id == survival2.id and survival1.id == survival3.id
             and survival1.id == survival4.id and survival1.id == survival5.id
             and survival1.id == survival6.id)
+    LogMaker.logger.info('程序运行结束')
