@@ -14,11 +14,23 @@ class Person:
         self.age = age
 
 
-class SolvingJosephMethods:
+class DequeMethod(deque):
+
     def __init__(self, total_number, step, people_list):
         self.total_number = total_number
         self.step = step
-        self.people_list = people_list
+        super().__init__(people_list)
+
+    def use_deque(self):
+        """使用collections库中的deque求解"""
+        LogMaker.logger.info('使用collections库中的deque求解')
+        while (len(self) > 1):
+            self.rotate(1-self.step)
+            self.popleft()
+        return self[0]
+
+
+class IterMethod:
 
     def __iter__(self):
         """使用迭代器来求解"""
@@ -30,9 +42,26 @@ class SolvingJosephMethods:
         if (len(self.iter_list) == 0):
             raise StopIteration
         id = (self.step-1) % len(self.iter_list)
-        removed = self.iter_list.pop(id)
+        removed = self.iter_list[id]
         self.iter_list = self.iter_list[id:]+self.iter_list[:id]
         return removed
+
+    def use_iter(self):
+        """使用迭代器迭代对象"""
+        file_writer = open('JosephusAnswer.txt', 'w')
+        for people in self:
+            file_writer.write("序号:{},姓名:{},年龄:{}\n".format(
+                people.id, people.name, people.age))
+        else:
+            file_writer.close()
+            return people
+
+
+class OtherMethods:
+    def __init__(self, total_number, step, people_list):
+        self.total_number = total_number
+        self.step = step
+        self.people_list = people_list
 
     def use_list(self):
         """使用list来进行求解"""
@@ -48,7 +77,7 @@ class SolvingJosephMethods:
         """使用链表来求解"""
         LogMaker.logger.info('使用链表来求解')
         linkedlist = LinkedList()
-        for person in self.people_list:
+        for person in people_list:
             linkedlist.append(person)
         current = linkedlist.head
         step_counter = 0
@@ -59,15 +88,6 @@ class SolvingJosephMethods:
                 linkedlist.delete(current.data)
             current = current.next
         return linkedlist.head.data
-
-    def use_deque(self):
-        """使用collections库中的deque求解"""
-        LogMaker.logger.info('使用collections库中的deque求解')
-        queue = deque(self.people_list)
-        while (len(queue) > 1):
-            queue.rotate(1-self.step)
-            queue.popleft()
-        return queue[0]
 
     def use_ecursion1(self, total_number=None, step=None):
         """使用递归的方法进行求解"""
@@ -89,7 +109,11 @@ class SolvingJosephMethods:
         counter = 0
         for i in range(2, self.total_number + 1):
             counter = (counter + self.step) % i
-        return self.people_list[counter]
+        return people_list[counter]
+
+
+class AllMethods(DequeMethod, IterMethod, OtherMethods):
+    pass
 
 
 class LinkedList:
@@ -154,17 +178,6 @@ def measure_time(func):
     return solution, execution_time
 
 
-def use_iter():
-    """使用迭代器迭代对象"""
-    file_writer = open('JosephusAnswer.txt', 'w')
-    for people in solution:
-        file_writer.write("序号:{},姓名:{},年龄:{}\n".format(
-            people.id, people.name, people.age))
-    else:
-        file_writer.close()
-        return people
-
-
 if __name__ == "__main__":
     LogMaker.logger.info('程序开始运行')
     filename = 'JosephusCircle.zip'
@@ -172,14 +185,14 @@ if __name__ == "__main__":
     if (people_list == []):
         LogMaker.logger.error('文件名无效')
         raise ValueError('文件名无效')
-    solution = SolvingJosephMethods(total_number=len(people_list),
-                             step=3, people_list=people_list)
+    solution = AllMethods(total_number=len(people_list),
+                          step=3, people_list=people_list)
     survival1, time1 = measure_time(solution.use_list)
     survival2, time2 = measure_time(solution.use_linkedlist)
     survival3, time3 = measure_time(solution.use_deque)
     survival4, time4 = measure_time(solution.use_ecursion1)
     survival5, time5 = measure_time(solution.use_ecursion2)
-    survival6, time6 = measure_time(use_iter)
+    survival6, time6 = measure_time(solution.use_iter)
     print("序号:{},姓名:{},年龄:{}".format(
         survival1.id, survival1.name, survival1.age))
     print("数组方法的用时:{}\n链表方法的用时:{}\n队列方法用时:{}\n"
