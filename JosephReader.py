@@ -36,11 +36,11 @@ class CsvReader:
         try:
             with open(self.filename, 'r', encoding='utf-8') as csv_file:
                 csv_reader = csv.reader(csv_file)
-            for line_content in csv_reader:
-                id = line_content[0].split(':')[1].strip()
-                name = line_content[1].split(':')[1].strip()
-                age = line_content[2].split(':')[1].strip()
-                self.people_list.append(Person(id, name, age))
+                for line_content in csv_reader:
+                    id = line_content[0].split(':')[1].strip()
+                    name = line_content[1].split(':')[1].strip()
+                    age = line_content[2].split(':')[1].strip()
+                    self.people_list.append(Person(id, name, age))
             return self.people_list
         except FileNotFoundError:
             raise FileNotFoundError(f"Can't find '{self.filename}'")

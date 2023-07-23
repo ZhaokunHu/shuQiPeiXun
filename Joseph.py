@@ -45,22 +45,22 @@ class IterJosephus:
         if (len(self.iter_list) == 0):
             raise StopIteration
         id = (self.step-1) % len(self.iter_list)
-        print(len(self.iter_list))
         removed = self.iter_list[id]
-        self.iter_list = self.iter_list[id:]+self.iter_list[:id]
+        self.iter_list = self.iter_list[id+1:]+self.iter_list[:id]
         return removed
 
     def find_answer(self):
         """使用迭代器迭代对象"""
-        for people in self:
-            pass
-        else:
+        with open('JosephusAnswer.txt', 'w') as file_writer:
+            for people in self:
+                file_writer.write("序号:{},姓名:{},年龄:{}\n".format(
+                    people.id, people.name, people.age))
             return people
 
 
 if __name__ == "__main__":
     LogMaker.logger.info('程序开始运行')
-    filename = 'JosephusCircle.txt'
+    filename = 'JosephusCircle.csv'
     people_list = JosephReader.read_file(filename=filename)
     survival1 = DequeJosephus(3, people_list).find_answer()
     survival2 = IterJosephus(3, people_list).find_answer()
