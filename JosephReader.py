@@ -9,18 +9,18 @@ class TxtReader:
         self.filename = filename
         self.people_list = []
 
-    def read_file(self, filename):
+    def read_file(self):
 
         LogMaker.logger.info('读取txt文件')
         try:
-            with open(filename, 'r') as txt_file:
+            with open(self.filename, 'r') as txt_file:
                 line_content = txt_file.readline()
-            while (line_content):
-                id = line_content.split(',')[0].split(':')[-1].strip()
-                name = line_content.split(',')[1].split(':')[-1].strip()
-                age = line_content.split(',')[2].split(':')[-1].strip()
-                self.people_list.append(Person(id, name, age))
-                line_content = txt_file.readline()
+                while (line_content):
+                    id = line_content.split(',')[0].split(':')[-1].strip()
+                    name = line_content.split(',')[1].split(':')[-1].strip()
+                    age = line_content.split(',')[2].split(':')[-1].strip()
+                    self.people_list.append(Person(id, name, age))
+                    line_content = txt_file.readline()
             return self.people_list
         except FileNotFoundError:
             raise FileNotFoundError(f"Can't find '{self.filename}'")

@@ -1,5 +1,4 @@
 import sys
-import time
 from copy import deepcopy
 from collections import deque
 import JosephReader
@@ -16,8 +15,7 @@ class Person:
 
 class DequeJosephus(deque):
 
-    def __init__(self, total_number, step, people_list):
-        self.total_number = total_number
+    def __init__(self, step, people_list):
         self.step = step
         self.people_list = people_list
         super().__init__(people_list)
@@ -33,16 +31,21 @@ class DequeJosephus(deque):
 
 class IterJosephus:
 
+    def __init__(self, step, people_list):
+        self.step = step
+        self.people_list = people_list
+        self.iter_list = deepcopy(people_list)
+
     def __iter__(self):
         """使用迭代器来求解"""
         LogMaker.logger.info('使用迭代器来求解')
-        self.iter_list = deepcopy(people_list)
         return self
 
     def __next__(self):
         if (len(self.iter_list) == 0):
             raise StopIteration
         id = (self.step-1) % len(self.iter_list)
+        print(len(self.iter_list))
         removed = self.iter_list[id]
         self.iter_list = self.iter_list[id:]+self.iter_list[:id]
         return removed
@@ -57,16 +60,11 @@ class IterJosephus:
 
 if __name__ == "__main__":
     LogMaker.logger.info('程序开始运行')
-    filename = 'JosephusCircle.zip'
-    people_list = JosephReader.Reader().read_file(filename=filename)
-    if (people_list == []):
-        LogMaker.logger.error('文件名无效')
-        raise ValueError('文件名无效')
-    solution = AllMethods(total_number=len(people_list),
-                          step=3, people_list=people_list)
+    filename = 'JosephusCircle.txt'
+    people_list = JosephReader.read_file(filename=filename)
+    survival1 = DequeJosephus(3, people_list).find_answer()
+    survival2 = IterJosephus(3, people_list).find_answer()
     print("序号:{},姓名:{},年龄:{}".format(
         survival1.id, survival1.name, survival1.age))
-    assert (survival1.id == survival2.id and survival1.id == survival3.id
-            and survival1.id == survival4.id and survival1.id == survival5.id
-            and survival1.id == survival6.id)
+    assert (survival1.id == survival2.id)
     LogMaker.logger.info('程序运行结束')

@@ -1,9 +1,4 @@
-2023-07-20 14:51:52,755 - mylogger - INFO - 程序开始运行
-2023-07-20 14:51:52,755 - mylogger - INFO - 读取zip文件
-2023-07-20 14:51:52,756 - mylogger - INFO - 读取txt文件
-2023-07-20 14:51:52,776 - mylogger - INFO - 使用list来求解
-2023-07-20 14:51:52,889 - mylogger - INFO - 使用链表来求解
-2023-07-20 14:51:53,619 - mylogger - INFO - 使用collections库中的deque求解
-2023-07-20 14:51:53,624 - mylogger - INFO - 使用递归的方法进行求解
-2023-07-20 14:51:53,624 - mylogger - INFO - 使用递推的方法进行求解
-2023-07-20 14:51:53,625 - mylogger - INFO - 程序运行结束
+2023-07-23 10:31:04,879 - mylogger - INFO - 程序开始运行
+2023-07-23 10:31:04,879 - mylogger - INFO - 读取txt文件
+2023-07-23 10:31:04,882 - mylogger - INFO - 使用collections库中的deque求解
+2023-07-23 10:31:04,888 - mylogger - INFO - 使用迭代器来求解
