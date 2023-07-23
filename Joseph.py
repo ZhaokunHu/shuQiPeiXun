@@ -2,6 +2,7 @@ from copy import deepcopy
 from collections import deque
 import JosephReader
 from LogConfig import setup_logging
+from UnittextJoseph import run_test
 logger = setup_logging()
 
 
@@ -61,9 +62,8 @@ if __name__ == "__main__":
     logger.info('程序开始运行')
     filename = 'JosephusCircle.zip'
     people_list = JosephReader.read_file(filename=filename)
-    survival1 = DequeJosephus(3, people_list).find_answer()
-    survival2 = IterJosephus(3, people_list).find_answer()
+    survival = DequeJosephus(3, people_list).find_answer()
     print("序号:{},姓名:{},年龄:{}".format(
-        survival1.id, survival1.name, survival1.age))
-    assert (survival1.id == survival2.id)
+        survival.id, survival.name, survival.age))
+    run_test()
     logger.info('程序运行结束')

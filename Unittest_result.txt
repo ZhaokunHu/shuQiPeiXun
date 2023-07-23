@@ -1,0 +1,11 @@
+text_deque_find_answer (UnittextJoseph.UnittextJoseph.text_deque_find_answer) ... ok
+text_iter_find_answer (UnittextJoseph.UnittextJoseph.text_iter_find_answer) ... ok
+text_txt_reader (UnittextJoseph.UnittextJoseph.text_txt_reader) ... ok
+text_csv_reader (UnittextJoseph.UnittextJoseph.text_csv_reader) ... ok
+text_zip_reader (UnittextJoseph.UnittextJoseph.text_zip_reader) ... ok
+text_read_file (UnittextJoseph.UnittextJoseph.text_read_file) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.531s
+
+OK
