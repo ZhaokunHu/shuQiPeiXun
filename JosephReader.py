@@ -1,8 +1,10 @@
 from Joseph import Person
 import csv
 import zipfile
-import LogMaker
 import os
+from LogConfig import setup_logging
+logger = setup_logging()
+
 
 class TxtReader:
     def __init__(self, filename):
@@ -11,7 +13,7 @@ class TxtReader:
 
     def read_file(self):
 
-        LogMaker.logger.info('读取txt文件')
+        logger.info('读取txt文件')
         try:
             with open(self.filename, 'r') as txt_file:
                 line_content = txt_file.readline()
@@ -32,7 +34,7 @@ class CsvReader:
         self.people_list = []
 
     def read_file(self):
-        LogMaker.logger.info('读取csv文件')
+        logger.info('读取csv文件')
         try:
             with open(self.filename, 'r', encoding='utf-8') as csv_file:
                 csv_reader = csv.reader(csv_file)
@@ -51,7 +53,7 @@ class ZipReader:
         self.filename = filename
 
     def read_file(self):
-        LogMaker.logger.info('读取zip文件')
+        logger.info('读取zip文件')
         try:
             with zipfile.ZipFile(self.filename, 'r') as zip_file:
                 inner_file = zip_file.namelist()[0]

@@ -1,9 +1,8 @@
-import sys
 from copy import deepcopy
 from collections import deque
 import JosephReader
-import LogMaker
-sys.setrecursionlimit(1000000)
+from LogConfig import setup_logging
+logger = setup_logging()
 
 
 class Person:
@@ -22,7 +21,7 @@ class DequeJosephus(deque):
 
     def find_answer(self):
         """使用collections库中的deque求解"""
-        LogMaker.logger.info('使用collections库中的deque求解')
+        logger.info('使用collections库中的deque求解')
         while (len(self) > 1):
             self.rotate(1-self.step)
             self.popleft()
@@ -38,7 +37,7 @@ class IterJosephus:
 
     def __iter__(self):
         """使用迭代器来求解"""
-        LogMaker.logger.info('使用迭代器来求解')
+        logger.info('使用迭代器来求解')
         return self
 
     def __next__(self):
@@ -59,7 +58,7 @@ class IterJosephus:
 
 
 if __name__ == "__main__":
-    LogMaker.logger.info('程序开始运行')
+    logger.info('程序开始运行')
     filename = 'JosephusCircle.zip'
     people_list = JosephReader.read_file(filename=filename)
     survival1 = DequeJosephus(3, people_list).find_answer()
@@ -67,4 +66,4 @@ if __name__ == "__main__":
     print("序号:{},姓名:{},年龄:{}".format(
         survival1.id, survival1.name, survival1.age))
     assert (survival1.id == survival2.id)
-    LogMaker.logger.info('程序运行结束')
+    logger.info('程序运行结束')
