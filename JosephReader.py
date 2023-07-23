@@ -10,7 +10,7 @@ class TxtReader:
         self.people_list = []
 
     def read_file(self, filename):
-        
+
         LogMaker.logger.info('读取txt文件')
         try:
             with open(filename, 'r') as txt_file:
@@ -45,29 +45,28 @@ class CsvReader:
         except FileNotFoundError:
             raise FileNotFoundError(f"Can't find '{self.filename}'")
 
+
 class ZipReader:
     def __init__(self, filename):
         self.filename = filename
+
     def read_file(self):
         LogMaker.logger.info('读取zip文件')
         try:
-            with zipfile.ZipFile(filename, 'r') as zip_file:
+            with zipfile.ZipFile(self.filename, 'r') as zip_file:
                 inner_file = zip_file.namelist()[0]
             return inner_file
         except FileNotFoundError:
             raise FileNotFoundError(f"Can't find '{self.filename}'")
-        
-def read_file(self, filename):
+
+
+def read_file(filename):
     typename = filename.split('.')[1].strip()
     if (typename == 'txt'):
-        self.read_txt(filename)
+        return TxtReader(filename).read_file()
     elif (typename == 'csv'):
-        self.read_csv(filename)
+        return CsvReader(filename).read_file()
     elif (typename == 'zip'):
-        LogMaker.logger.info('读取zip文件')
-        with zipfile.ZipFile(filename, 'r') as zip_file:
-            file_list = zip_file.namelist()
-            self.read_file(file_list[0])
+        return read_file(ZipReader(filename).read_file())
     else:
-        pass
-    return self.people_list
+        raise FileNotFoundError(f"Don't support the typename of '{filename}'")
