@@ -60,7 +60,7 @@ class IterJosephus:
 
 if __name__ == "__main__":
     LogMaker.logger.info('程序开始运行')
-    filename = 'JosephusCircle.csv'
+    filename = 'JosephusCircle.zip'
     people_list = JosephReader.read_file(filename=filename)
     survival1 = DequeJosephus(3, people_list).find_answer()
     survival2 = IterJosephus(3, people_list).find_answer()
