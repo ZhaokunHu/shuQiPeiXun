@@ -7,7 +7,7 @@ import LogMaker
 class CsvReader:
     def __init__(self, filename):
         self.filename = filename
-
+        
     def read_file(self):
         try:
             with open(self.filename, 'r', encoding='utf-8') as csv_file:
