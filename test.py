@@ -1,8 +1,10 @@
 from collections import deque
 
+
 class Person:
     def __init__(self, name):
         self.name = name
+
 
 class JosephusCircle(deque):
     def __init__(self, persons):

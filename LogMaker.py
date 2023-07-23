@@ -5,7 +5,7 @@ logger = logging.getLogger('mylogger')
 logger.setLevel(logging.DEBUG)
 
 # 2、创建一个handler，用于写入日志文件
-fh = logging.FileHandler('log.txt','w')
+fh = logging.FileHandler('log.txt', 'w')
 fh.setLevel(logging.DEBUG)
 
 # 再创建一个handler，用于输出到控制台
@@ -13,7 +13,8 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 
 # 3、定义handler的输出格式（formatter）
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # 4、给handler添加formatter
 fh.setFormatter(formatter)

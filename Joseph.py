@@ -19,6 +19,7 @@ class DequeMethod(deque):
     def __init__(self, total_number, step, people_list):
         self.total_number = total_number
         self.step = step
+        self.people_list = people_list
         super().__init__(people_list)
 
     def use_deque(self):
@@ -58,11 +59,6 @@ class IterMethod:
 
 
 class OtherMethods:
-    def __init__(self, total_number, step, people_list):
-        self.total_number = total_number
-        self.step = step
-        self.people_list = people_list
-
     def use_list(self):
         """使用list来进行求解"""
         LogMaker.logger.info('使用list来求解')
