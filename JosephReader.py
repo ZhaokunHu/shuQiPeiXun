@@ -2,7 +2,7 @@ from Joseph import Person
 import csv
 import zipfile
 import LogMaker
-
+import os
 
 class TxtReader:
     def __init__(self, filename):
@@ -36,11 +36,11 @@ class CsvReader:
         try:
             with open(self.filename, 'r', encoding='utf-8') as csv_file:
                 csv_reader = csv.reader(csv_file)
-            for line_content in csv_reader:
-                id = line_content[0].split(':')[1].strip()
-                name = line_content[1].split(':')[1].strip()
-                age = line_content[2].split(':')[1].strip()
-                self.people_list.append(Person(id, name, age))
+                for line_content in csv_reader:
+                    id = line_content[0].split(':')[1].strip()
+                    name = line_content[1].split(':')[1].strip()
+                    age = line_content[2].split(':')[1].strip()
+                    self.people_list.append(Person(id, name, age))
             return self.people_list
         except FileNotFoundError:
             raise FileNotFoundError(f"Can't find '{self.filename}'")
@@ -61,12 +61,12 @@ class ZipReader:
 
 
 def read_file(filename):
-    typename = filename.split('.')[1].strip()
-    if (typename == 'txt'):
+    typename = os.path.splitext(filename)[-1]
+    if (typename == '.txt'):
         return TxtReader(filename).read_file()
-    elif (typename == 'csv'):
+    elif (typename == '.csv'):
         return CsvReader(filename).read_file()
-    elif (typename == 'zip'):
+    elif (typename == '.zip'):
         return read_file(ZipReader(filename).read_file())
     else:
         raise FileNotFoundError(f"Don't support the typename of '{filename}'")
