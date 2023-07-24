@@ -6,6 +6,6 @@ text_zip_reader (UnittextJoseph.UnittextJoseph.text_zip_reader) ... ok
 text_read_file (UnittextJoseph.UnittextJoseph.text_read_file) ... ok
 
 ----------------------------------------------------------------------
-Ran 6 tests in 0.531s
+Ran 6 tests in 0.521s
 
 OK
