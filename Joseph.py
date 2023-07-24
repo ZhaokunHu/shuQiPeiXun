@@ -47,7 +47,7 @@ class IterJosephus:
         id = (self.step-1) % len(self.iter_list)
         print(len(self.iter_list))
         removed = self.iter_list[id]
-        self.iter_list = self.iter_list[id:]+self.iter_list[:id]
+        self.iter_list = self.iter_list[id+1:]+self.iter_list[:id]
         return removed
 
     def find_answer(self):
